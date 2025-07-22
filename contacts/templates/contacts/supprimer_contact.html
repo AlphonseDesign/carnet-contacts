@@ -1,0 +1,52 @@
+{% extends 'contacts/base.html' %}
+{% load static %}
+
+{% block title %}Supprimer le contact{% endblock %}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card p-4 shadow-lg animate__animated animate__fadeIn" style="max-width: 500px; width: 100%;">
+        <div class="text-center">
+            <h2 class="text-danger mb-4"><i class="bi bi-trash-fill"></i> Supprimer le contact</h2>
+
+            <p class="lead mb-3 text-muted">
+                Es-tu sûr de vouloir supprimer ce contact ?
+            </p>
+
+            <!-- Photo de profil ou initiales -->
+            {% if contact.photo %}
+                <img src="{{ contact.photo.url }}" alt="Photo de {{ contact.prenom }}"
+                     class="rounded-circle shadow mb-3"
+                     style="width: 100px; height: 100px; object-fit: cover; border: 3px solid #dc3545;">
+            {% else %}
+                <div class="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center mx-auto mb-3"
+                     style="width: 100px; height: 100px; font-size: 40px;">
+                    {{ contact.prenom|first }}{{ contact.nom|first }}
+                </div>
+            {% endif %}
+
+            <h4 class="mb-2">{{ contact.prenom }} {{ contact.nom }}</h4>
+            <p><strong>Téléphone :</strong> {{ contact.telephone }}</p>
+            <p><strong>Email :</strong> {{ contact.email|default:"-" }}</p>
+            <p><strong>Adresse :</strong> {{ contact.adresse|default:"-" }}</p>
+            <p><strong>Genre :</strong>
+                {% if contact.genre == 'M' %} Masculin
+                {% elif contact.genre == 'F' %} Féminin
+                {% else %} Non spécifié
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- Formulaire de suppression -->
+        <form method="post" class="text-center mt-4">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger px-4 me-2 shadow-sm">
+                <i class="bi bi-trash-fill"></i> Supprimer
+            </button>
+            <a href="{% url 'liste_contacts' %}" class="btn btn-outline-secondary px-4 shadow-sm">
+                <i class="bi bi-arrow-left-circle"></i> Annuler
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}

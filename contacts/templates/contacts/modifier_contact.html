@@ -1,0 +1,72 @@
+{% extends 'contacts/base.html' %}
+{% load static %}
+
+{% block title %}Modifier le contact{% endblock %}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="col-md-8 col-lg-6 animate__animated animate__fadeInUp shadow-lg p-4 rounded bg-white">
+        <h2 class="text-center text-primary fw-bold mb-4">
+            <i class="bi bi-pencil-square"></i> Modifier le contact
+        </h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Prénom -->
+            <div class="mb-3">
+                <label for="prenom" class="form-label fw-semibold">Prénom</label>
+                <input type="text" class="form-control" id="prenom" name="prenom" value="{{ contact.prenom }}" required>
+            </div>
+
+            <!-- Nom -->
+            <div class="mb-3">
+                <label for="nom" class="form-label fw-semibold">Nom</label>
+                <input type="text" class="form-control" id="nom" name="nom" value="{{ contact.nom }}" required>
+            </div>
+
+            <!-- Téléphone -->
+            <div class="mb-3">
+                <label for="telephone" class="form-label fw-semibold">Téléphone</label>
+                <input type="text" class="form-control" id="telephone" name="telephone" value="{{ contact.telephone }}" required>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label for="email" class="form-label fw-semibold">Email</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ contact.email }}">
+            </div>
+
+            <!-- Adresse -->
+            <div class="mb-3">
+                <label for="adresse" class="form-label fw-semibold">Adresse</label>
+                <input type="text" class="form-control" id="adresse" name="adresse" value="{{ contact.adresse }}">
+            </div>
+            <!-- Genre -->
+            <div class="mb-3">
+                <label for="genre" class="form-label fw-semibold">Genre</label>
+                <select class="form-select" id="genre" name="genre" required>
+                    <option value="">-- Choisissez un genre --</option>
+                    <option value="M" {% if contact.genre == "M" %}selected{% endif %}>Masculin</option>
+                    <option value="F" {% if contact.genre == "F" %}selected{% endif %}>Féminin</option>
+                </select>
+            </div>
+                        <!-- Photo -->
+            <div class="mb-3">
+                <label for="photo" class="form-label fw-semibold">Photo de profil</label>
+                <input type="file" name="photo" id="photo" class="form-control">
+            </div>
+
+            <!-- Boutons -->
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <a href="{% url 'liste_contacts' %}" class="btn btn-outline-secondary shadow-sm">
+                    <i class="bi bi-arrow-left-circle"></i> Retour
+                </a>
+                <button type="submit" class="btn btn-success shadow-sm px-4">
+                    <i class="bi bi-check-circle-fill"></i> Enregistrer
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
