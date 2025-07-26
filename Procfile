@@ -1,1 +1,2 @@
-web: gunicorn carnet.wsgi:application
+web: gunicorn carnet_contacts.wsgi:application
+
