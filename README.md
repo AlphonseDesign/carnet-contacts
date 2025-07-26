@@ -3,7 +3,7 @@ Projet Django : Carnet d'adresses numériques
 Ce projet est une application web construite avec Django.  
 Elle permet à un utilisateur (administrateur uniquement) de :
 
-- Se connecter avec e-mail et mot de passe
+- Se connecter avec nom d'utilisateur et mot de passe
 - Ajouter des contacts
 - Voir la liste des contacts avec photo de profil
 - Voir les détails d’un contact (avec photo)
