@@ -3,15 +3,16 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ✅ Secret sécurisé
+# ✅ Clé secrète (à définir dans les variables Render)
 SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme-in-local-dev')
 
-# ✅ Mode production
+# ✅ Mode production désactivé par défaut
 DEBUG = False
 
-# ✅ Autoriser Render
+# ✅ Domaine Render autorisé
 ALLOWED_HOSTS = ['.onrender.com']
 
+# ✅ Applications installées
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -22,6 +23,7 @@ INSTALLED_APPS = [
     'contacts.apps.ContactsConfig',
 ]
 
+# ✅ Middleware standard
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -32,14 +34,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# ✅ URLs et WSGI
 ROOT_URLCONF = 'carnet.urls'
+WSGI_APPLICATION = 'carnet.wsgi.application'
 
+# ✅ Templates (avec répertoire personnalisé)
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'contacts', 'templates'),
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'contacts', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -52,8 +55,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'carnet.wsgi.application'
-
+# ✅ Base de données SQLite
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -61,6 +63,7 @@ DATABASES = {
     }
 }
 
+# ✅ Validateurs de mot de passe
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -68,17 +71,20 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# ✅ Langue et fuseau
 LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# ✅ Fichiers statiques (collectstatic)
+# ✅ Fichiers statiques (logo, CSS, JS...)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'contacts', 'static'),  # ➕ TON dossier où est le logo
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # ➕ pour Render
 
-# ✅ Fichiers médias
+# ✅ Médias (si tu ajoutes des fichiers uploadés par l’utilisateur)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
