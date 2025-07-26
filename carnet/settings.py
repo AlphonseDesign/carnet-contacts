@@ -80,3 +80,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Authentification
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/accueil/'
+
+import os
+ALLOWED_HOSTS = ['.onrender.com']

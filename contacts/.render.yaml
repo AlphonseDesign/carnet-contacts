@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: carnet-contacts
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn carnet_contacts.wsgi:application"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: carnet_contacts.settings
+      - key: PYTHON_VERSION
+        value: 3.11
