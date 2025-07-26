@@ -3,9 +3,14 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-umi10be49hr*wqhvaasn@uu!dgf7+^0y$tr@=hu9iv+0r5am1_'
-DEBUG = True
-ALLOWED_HOSTS = []
+# ✅ Secret sécurisé
+SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme-in-local-dev')
+
+# ✅ Mode production
+DEBUG = False
+
+# ✅ Autoriser Render
+ALLOWED_HOSTS = ['.onrender.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -68,18 +73,15 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Fichiers statiques
+# ✅ Fichiers statiques (collectstatic)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Fichiers médias
+# ✅ Fichiers médias
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Authentification
+# ✅ Authentification
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/accueil/'
-
-import os
-ALLOWED_HOSTS = ['.onrender.com']
