@@ -1,7 +1,30 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from .models import Contact
+
+
+def signup_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+
+        if password1 != password2:
+            return render(request, 'contacts/signup.html', {'error': 'Les mots de passe ne correspondent pas.'})
+        if User.objects.filter(username=username).exists():
+            return render(request, 'contacts/signup.html', {'error': 'Ce nom d’utilisateur existe déjà.'})
+
+        user = User.objects.create_user(username=username, password=password1)
+        login(request, user)
+        return redirect('accueil')
+
+    return render(request, 'contacts/signup.html')
+
+# contacts/views.py
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
 
 def login_view(request):
     if request.method == 'POST':
@@ -10,10 +33,9 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return redirect('accueil')
+            return redirect('accueil')  # ou la page d’accueil de votre app
         else:
-            return render(request, 'contacts/login.html', {'error': 'Nom d’utilisateur ou mot de passe incorrect'})
-    
+            return render(request, 'contacts/login.html', {'error': 'Identifiants invalides'})
     return render(request, 'contacts/login.html')
 
 
@@ -21,9 +43,15 @@ def login_view(request):
 def accueil(request):
     return render(request, 'contacts/accueil.html')
 
+
+@login_required(login_url='login')
 def liste_contacts(request):
-    contacts = Contact.objects.all()
+    if request.user.is_staff:
+        contacts = Contact.objects.all()
+    else:
+        contacts = Contact.objects.filter(user=request.user)
     return render(request, 'contacts/liste_contacts.html', {'contacts': contacts})
+
 
 @login_required(login_url='login')
 def ajouter_contact(request):
@@ -37,10 +65,11 @@ def ajouter_contact(request):
         genre = request.POST.get('genre')
         photo = request.FILES.get('photo')
 
-        if Contact.objects.filter(prenom=prenom, nom=nom, telephone=telephone, email=email).exists():
+        if Contact.objects.filter(user=request.user, prenom=prenom, nom=nom, telephone=telephone, email=email).exists():
             erreur = "Ce contact existe déjà."
         else:
             Contact.objects.create(
+                user=request.user,
                 prenom=prenom,
                 nom=nom,
                 telephone=telephone,
@@ -53,9 +82,13 @@ def ajouter_contact(request):
 
     return render(request, 'contacts/ajouter_contact.html', {'erreur': erreur})
 
+
 @login_required(login_url='login')
 def modifier_contact(request, contact_id):
     contact = get_object_or_404(Contact, id=contact_id)
+
+    if contact.user != request.user and not request.user.is_staff:
+        return redirect('liste_contacts')
 
     if request.method == 'POST':
         contact.prenom = request.POST.get('prenom', '').strip()
@@ -73,9 +106,13 @@ def modifier_contact(request, contact_id):
 
     return render(request, 'contacts/modifier_contact.html', {'contact': contact})
 
+
 @login_required(login_url='login')
 def supprimer_contact(request, contact_id):
     contact = get_object_or_404(Contact, id=contact_id)
+
+    if contact.user != request.user and not request.user.is_staff:
+        return redirect('liste_contacts')
 
     if request.method == 'POST':
         contact.delete()
@@ -83,10 +120,16 @@ def supprimer_contact(request, contact_id):
 
     return render(request, 'contacts/supprimer_contact.html', {'contact': contact})
 
+
 @login_required(login_url='login')
 def details_contact(request, contact_id):
     contact = get_object_or_404(Contact, id=contact_id)
+
+    if contact.user != request.user and not request.user.is_staff:
+        return redirect('liste_contacts')
+
     return render(request, 'contacts/details.html', {'contact': contact})
+
 
 def logout_view(request):
     logout(request)

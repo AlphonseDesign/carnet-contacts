@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Connexion - KivuContacts</title>
+    <title>Connexion - Carnet Contacts</title>
     {% load static %}
     <style>
         body {
@@ -113,7 +113,7 @@
         {% if error %}
             <p class="error">{{ error }}</p>
         {% endif %}
-        <form method="post" onsubmit="return showLoading()">
+                <form method="post" onsubmit="return showLoading()">
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">Nom d'utilisateur</label>
@@ -125,7 +125,13 @@
             </div>
             <button type="submit">Se connecter</button>
             <p class="loading-message" id="loading">Connexion en cours...</p>
+
+            <!-- 🔽 Lien vers l'inscription -->
+            <div style="margin-top: 15px;">
+                <small>Pas encore de compte ? <a href="{% url 'signup' %}" style="color: #4facfe; text-decoration: none;">Créer un compte</a></small>
+            </div>
         </form>
+
     </div>
 
     <script>

@@ -14,7 +14,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'contacts.apps.ContactsConfig',  # ton app
+    'contacts.apps.ContactsConfig',
 ]
 
 MIDDLEWARE = [
@@ -28,10 +28,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'carnet.urls'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'contacts', 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'contacts', 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -44,7 +47,6 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = 'carnet.wsgi.application'
 
 DATABASES = {
@@ -55,27 +57,26 @@ DATABASES = {
 }
 
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+# Fichiers statiques
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
+STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# Fichiers médias
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# 🔐 Redirection sécurisée
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/contacts/'  # ou la route nommée 'liste'
-
+# Authentification
+LOGIN_URL = '/'
+LOGIN_REDIRECT_URL = '/accueil/'
