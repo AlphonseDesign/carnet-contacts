@@ -1,0 +1,50 @@
+{% extends 'contacts/base.html' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4 text-primary">
+        <i class="bi bi-people-fill me-2"></i> Comptes utilisateurs enregistrés
+    </h2>
+
+    {% if utilisateurs %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover shadow-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nom d'utilisateur</th>
+                        <th scope="col">Date d'inscription</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in utilisateurs %}
+                        {% if user != request.user %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.date_joined|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <a href="{% url 'envoyer_message' user.username %}" class="btn btn-outline-primary btn-sm">
+                                    ✉ Envoyer un message
+                                </a>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-center text-muted">Aucun utilisateur trouvé.</p>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        <a href="{% url 'liste_contacts' %}" class="btn btn-outline-secondary btn-lg shadow-sm">
+            <i class="bi bi-arrow-left-circle me-2"></i> Retour à la liste des contacts
+        </a>
+    </div>
+</div>
+{% endblock %}

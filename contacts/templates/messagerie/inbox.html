@@ -1,0 +1,23 @@
+{% extends 'contacts/base.html' %}
+
+{% block title %}Boîte de Réception{% endblock %}
+
+{% block content %}
+<h2>Boîte de réception</h2>
+
+{% if messages %}
+    <ul class="list-group">
+        {% for message in messages %}
+            <li class="list-group-item {% if not message.is_read %}list-group-item-warning{% endif %}">
+                <a href="{% url 'conversation' message.sender.username %}">
+                    <strong>{{ message.sender.username }}</strong> :
+                    {{ message.content|truncatechars:50 }}
+                    <span class="text-muted float-end">{{ message.timestamp|date:"d/m/Y H:i" }}</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Aucun message reçu.</p>
+{% endif %}
+{% endblock %}

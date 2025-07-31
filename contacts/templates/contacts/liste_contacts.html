@@ -4,7 +4,6 @@
 
 {% block content %}
 <style>
-    /* Titre stylisé */
     .page-title {
         font-size: 2.5rem;
         font-weight: 700;
@@ -22,11 +21,10 @@
         color: #00c6ff;
     }
 
-    /* Animation */
     .animatable {
         opacity: 0;
         transform: translateY(20px);
-        transition: all 0.1s ease;
+        transition: all 0.5s ease;
     }
 
     .animatable.visible {
@@ -34,7 +32,6 @@
         transform: translateY(0);
     }
 
-    /* Ajout d’un style pro aux boutons */
     .table td,
     .table th {
         vertical-align: middle;
@@ -44,7 +41,6 @@
         margin-right: 4px;
     }
 
-    /* Responsive ajustement */
     @media (max-width: 576px) {
         .page-title {
             font-size: 1.6rem;
@@ -61,23 +57,31 @@
         <i class="bi bi-person-lines-fill"></i> Liste de Contacts
     </h1>
 
+    {% if user.is_superuser %}
+        <div class="text-center mb-4">
+            <a href="{% url 'liste_utilisateurs' %}" class="btn btn-outline-primary">
+                <i class="bi bi-people-fill me-1"></i> Liste des utilisateurs
+            </a>
+        </div>
+    {% endif %}
+
     {% if contacts %}
     <div class="table-responsive">
         <table class="table table-hover align-middle shadow-sm rounded">
             <thead class="table-primary">
                 <tr>
-                    <th>Prénom</th>
-                    <th>Nom</th>
-                    <th>Téléphone</th>
-                    <th>Email</th>
-                    <th>Adresse</th>
-                    <th>Genre</th>
-                    <th class="text-center">Actions</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Téléphone</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Adresse</th>
+                    <th scope="col">Genre</th>
+                    <th scope="col" class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for contact in contacts %}
-                <tr class="animatable" onclick="window.location='{% url 'detail_contact' contact.id %}'" style="cursor: pointer;">
+                <tr class="animatable" onclick="window.location='{% url 'details' contact.id %}'" style="cursor: pointer;">
                     <td>{{ contact.prenom }}</td>
                     <td>{{ contact.nom }}</td>
                     <td>{{ contact.telephone }}</td>

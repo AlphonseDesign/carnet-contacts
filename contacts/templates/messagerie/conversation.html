@@ -1,0 +1,23 @@
+{% extends 'contacts/base.html' %}
+{% block content %}
+<h2>Conversation avec {{ other_user.username }}</h2>
+
+<div class="border p-3 mb-3" style="height: 300px; overflow-y: scroll; background: #f8f9fa;">
+    {% for message in messages %}
+        <div class="{% if message.sender == user %}text-end{% else %}text-start{% endif %}">
+            <strong>{{ message.sender.username }} :</strong>
+            <p class="mb-1">{{ message.content }}</p>
+            <small class="text-muted">{{ message.timestamp|date:"d/m/Y H:i" }}</small>
+            <hr>
+        </div>
+    {% empty %}
+        <p class="text-muted">Aucun message pour le moment.</p>
+    {% endfor %}
+</div>
+
+<form method="post" class="d-flex">
+    {% csrf_token %}
+    <input type="text" name="content" class="form-control me-2" placeholder="Écrire un message..." required>
+    <button type="submit" class="btn btn-primary">Envoyer</button>
+</form>
+{% endblock %}

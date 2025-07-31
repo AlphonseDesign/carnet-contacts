@@ -3,16 +3,10 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ✅ Clé secrète (à définir dans les variables Render)
-SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme-in-local-dev')
+SECRET_KEY = 'django-insecure-umi10be49hr*wqhvaasn@uu!dgf7+^0y$tr@=hu9iv+0r5am1_'
+DEBUG = True
+ALLOWED_HOSTS = []
 
-# ✅ Mode production désactivé par défaut
-DEBUG = False
-
-# ✅ Domaine Render autorisé
-ALLOWED_HOSTS = ['.onrender.com']
-
-# ✅ Applications installées
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -23,7 +17,6 @@ INSTALLED_APPS = [
     'contacts.apps.ContactsConfig',
 ]
 
-# ✅ Middleware standard
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -34,15 +27,16 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# ✅ URLs et WSGI
 ROOT_URLCONF = 'carnet.urls'
-WSGI_APPLICATION = 'carnet.wsgi.application'
 
-# ✅ Templates (avec répertoire personnalisé)
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'contacts', 'templates')],
+        'DIRS': [
+            # ✅ Ajout du dossier principal "templates" pour trouver registration/login.html
+            BASE_DIR / 'templates',
+            BASE_DIR / 'contacts' / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -55,7 +49,8 @@ TEMPLATES = [
     },
 ]
 
-# ✅ Base de données SQLite
+WSGI_APPLICATION = 'carnet.wsgi.application'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -63,7 +58,6 @@ DATABASES = {
     }
 }
 
-# ✅ Validateurs de mot de passe
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -71,23 +65,20 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# ✅ Langue et fuseau
-LANGUAGE_CODE = 'fr-fr'
+LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# ✅ Fichiers statiques (logo, CSS, JS...)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'contacts', 'static'),  # ➕ TON dossier où est le logo
+    BASE_DIR / 'static',
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # ➕ pour Render
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# ✅ Médias (si tu ajoutes des fichiers uploadés par l’utilisateur)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# ✅ Authentification
-LOGIN_URL = '/'
-LOGIN_REDIRECT_URL = '/accueil/'
+# ✅ Redirection après login et logout
+LOGIN_REDIRECT_URL = 'accueil'
+LOGOUT_REDIRECT_URL = 'login'
