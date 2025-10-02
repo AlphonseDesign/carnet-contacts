@@ -1,0 +1,73 @@
+{% extends 'contacts/base.html' %}
+{% load static %}
+
+{% block title %}Détails du contact{% endblock %}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow-lg p-4 animate__animated animate__fadeIn" style="max-width: 500px; width: 100%;">
+        <!-- Section photo -->
+        <div class="text-center mb-4">
+            {% if contact.photo %}
+                <img src="{{ contact.photo.url }}" alt="Photo de {{ contact.prenom }}"
+                     class="rounded-circle shadow"
+                     style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #ccc;">
+            {% else %}
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto"
+                     style="width: 120px; height: 120px; font-size: 48px;">
+                    {{ contact.prenom|first }}{{ contact.nom|first }}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Nom complet -->
+        <h3 class="text-center text-primary fw-bold mb-3">
+            {{ contact.prenom }} {{ contact.nom }}
+        </h3>
+
+        <!-- Informations du contact -->
+        <ul class="list-group list-group-flush mb-4">
+            <li class="list-group-item">
+                <i class="bi bi-telephone-fill text-primary me-2"></i>
+                <strong>Téléphone :</strong> {{ contact.telephone }}
+            </li>
+            <li class="list-group-item">
+                <i class="bi bi-envelope-fill text-primary me-2"></i>
+                <strong>Email :</strong> {{ contact.email|default:"-" }}
+            </li>
+            <li class="list-group-item">
+                <i class="bi bi-geo-alt-fill text-primary me-2"></i>
+                <strong>Adresse :</strong> {{ contact.adresse|default:"-" }}
+            </li>
+            <li class="list-group-item">
+                <i class="bi bi-gender-ambiguous text-primary me-2"></i>
+                <strong>Genre :</strong>
+                {% if contact.genre == 'M' %}
+                    Masculin
+                {% elif contact.genre == 'F' %}
+                    Féminin
+                {% else %}
+                    Non spécifié
+                {% endif %}
+            </li>
+        </ul>
+
+        <!-- Actions -->
+        <div class="text-center">
+            <a href="{% url 'modifier_contact' contact.id %}" class="btn btn-warning me-2 px-4 shadow-sm">
+                <i class="bi bi-pencil-fill"></i> Modifier
+            </a>
+            <a href="{% url 'supprimer_contact' contact.id %}" class="btn btn-danger px-4 shadow-sm">
+                <i class="bi bi-trash-fill"></i> Supprimer
+            </a>
+        </div>
+
+        <!-- Retour -->
+        <div class="text-center mt-4">
+            <a href="{% url 'liste_contacts' %}" class="btn btn-outline-primary px-4 shadow-sm">
+                <i class="bi bi-arrow-left-circle"></i> Retour
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

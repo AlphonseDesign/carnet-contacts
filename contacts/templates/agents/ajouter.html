@@ -1,0 +1,47 @@
+{% extends 'contacts/base.html' %}
+{% load static %}
+
+{% block title %}Ajouter un agent{% endblock %}
+
+{% block content %}
+<div class="container mt-5 animate__animated animate__fadeIn">
+  <div class="card shadow-lg">
+    <div class="card-header bg-success text-white">
+      <h4 class="mb-0"><i class="bi bi-person-plus-fill me-2"></i>Ajouter un agent à {{ entreprise.nom }}</h4>
+    </div>
+    <div class="card-body">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row">
+          {% for field in form %}
+            <div class="mb-3 col-md-6">
+              <label class="form-label fw-semibold" for="{{ field.id_for_label }}">
+                {{ field.label }}
+                {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+              </label>
+              {{ field }}
+              {% if field.help_text %}
+                <div class="form-text text-muted">{{ field.help_text }}</div>
+              {% endif %}
+              {% if field.errors %}
+                <div class="text-danger small">{{ field.errors }}</div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Boutons : retour + ajouter -->
+        <div class="d-flex justify-content-between mt-4">
+          <a href="{% url 'liste_agents' entreprise.id %}" class="btn btn-outline-secondary shadow-sm">
+            <i class="bi bi-arrow-left me-1"></i> Retour
+          </a>
+          <button type="submit" class="btn btn-primary shadow-sm px-4">
+            <i class="bi bi-check-circle-fill me-2"></i>Ajouter l'agent
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

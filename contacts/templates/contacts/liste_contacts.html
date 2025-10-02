@@ -1,0 +1,137 @@
+{% extends 'contacts/base.html' %}
+
+{% block title %}Liste des contacts{% endblock %}
+
+{% block content %}
+<style>
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #007bff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.7rem;
+        margin-bottom: 1.5rem;
+        text-shadow: 1px 1px 2px rgba(0, 123, 255, 0.2);
+    }
+    .page-title i {
+        font-size: 2.2rem;
+        color: #00c6ff;
+    }
+    .animatable {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.5s ease;
+    }
+    .animatable.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .table td, .table th {
+        vertical-align: middle;
+    }
+    .btn-sm i {
+        margin-right: 4px;
+    }
+    @media (max-width: 576px) {
+        .page-title {
+            font-size: 1.6rem;
+        }
+        .page-title i {
+            font-size: 1.6rem;
+        }
+    }
+</style>
+
+<div class="container mt-5">
+    <h1 class="page-title">
+        <i class="bi bi-person-lines-fill"></i> Liste de Contacts
+    </h1>
+
+    {% if user.is_superuser %}
+        <div class="text-center mb-4">
+            <a href="{% url 'liste_utilisateurs' %}" class="btn btn-outline-primary">
+                <i class="bi bi-people-fill me-1"></i> Liste des utilisateurs
+            </a>
+        </div>
+    {% endif %}
+
+    {% if contacts %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle shadow-sm rounded">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Prénom</th>
+                        <th>Nom</th>
+                        <th>Téléphone</th>
+                        <th>Email</th>
+                        <th>Adresse</th>
+                        <th>Genre</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contact in contacts %}
+                        <tr class="animatable" onclick="window.location='{% url 'details' contact.id %}'" style="cursor: pointer;">
+                            <td>{{ contact.prenom }}</td>
+                            <td>{{ contact.nom }}</td>
+                            <td>{{ contact.telephone }}</td>
+                            <td>{{ contact.email|default:"-" }}</td>
+                            <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                {{ contact.adresse|default:"-" }}
+                            </td>
+                            <td>
+                                {% if contact.genre == 'M' %}
+                                    Masculin
+                                {% elif contact.genre == 'F' %}
+                                    Féminin
+                                {% else %}
+                                    Non spécifié
+                                {% endif %}
+                            </td>
+                            <td class="text-center" onclick="event.stopPropagation();">
+                                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                    <a href="{% url 'modifier_contact' contact.id %}" class="btn btn-sm btn-warning">
+                                        <i class="bi bi-pencil-fill"></i> Modifier
+                                    </a>
+                                    <a href="{% url 'supprimer_contact' contact.id %}" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash-fill"></i> Supprimer
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-center text-muted">Aucun contact trouvé.</p>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        <a href="{% url 'ajouter_contact' %}" class="btn btn-success btn-lg shadow-sm">
+            <i class="bi bi-person-plus-fill me-2"></i> Ajouter un contact
+        </a>
+    </div>
+
+    {% if not mon_entreprise %}
+        <div class="text-center mt-3">
+            <a href="{% url 'creer_entreprise' %}" class="btn btn-outline-primary btn-lg shadow-sm">
+                <i class="bi bi-building-add me-2"></i> Créer ton entreprise
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const rows = document.querySelectorAll('.animatable');
+        rows.forEach((row, index) => {
+            setTimeout(() => {
+                row.classList.add('visible');
+            }, index * 120);
+        });
+    });
+</script>
+{% endblock %}

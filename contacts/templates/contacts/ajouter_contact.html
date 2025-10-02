@@ -1,0 +1,162 @@
+{% extends 'contacts/base.html' %}
+{% load static %}
+
+{% block title %}Ajouter un contact{% endblock %}
+
+{% block content %}
+<style>
+    /* ANIMATIONS */
+    .fade-in {
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-in {
+        animation: slideIn 0.6s ease-out forwards;
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    @keyframes slideIn {
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* FORM STYLING */
+    .form-control:focus, .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 10px rgba(13, 110, 253, 0.3);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .form-label {
+        font-weight: 500;
+    }
+
+    /* BUTTONS */
+    .btn-primary {
+        background-color: #0d6efd;
+        transition: all 0.3s ease-in-out;
+        font-weight: bold;
+    }
+
+    .btn-primary:hover {
+        background-color: #084298;
+        transform: scale(1.05);
+    }
+
+    .btn-secondary {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn-secondary:hover {
+        background-color: #6c757d;
+        transform: scale(1.05);
+    }
+
+    /* CUSTOM FILE INPUT PREVIEW */
+    #preview {
+        display: none;
+        margin-top: 10px;
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border: 2px solid #0d6efd;
+    }
+</style>
+
+<!-- CONTENU -->
+<div class="container mt-5 fade-in" style="max-width: 520px;">
+    <h2 class="text-center mb-4 text-primary">Ajouter un nouveau contact</h2>
+
+    {% if erreur %}
+        <div class="alert alert-danger text-center slide-in">
+            {{ erreur }}
+        </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'ajouter_contact' %}" enctype="multipart/form-data" class="fade-in">
+        {% csrf_token %}
+
+        <div class="mb-3 slide-in">
+            <label for="prenom" class="form-label">Prénom</label>
+            <input type="text" name="prenom" id="prenom" class="form-control" required>
+        </div>
+
+        <div class="mb-3 slide-in">
+            <label for="nom" class="form-label">Nom</label>
+            <input type="text" name="nom" id="nom" class="form-control" required>
+        </div>
+
+        <div class="mb-3 slide-in">
+            <label for="telephone" class="form-label">Téléphone</label>
+            <input type="text" name="telephone" id="telephone" class="form-control" required>
+        </div>
+
+        <div class="mb-3 slide-in">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" name="email" id="email" class="form-control">
+        </div>
+
+        <div class="mb-3 slide-in">
+            <label for="adresse" class="form-label">Adresse</label>
+            <textarea name="adresse" id="adresse" class="form-control" rows="2"></textarea>
+        </div>
+
+        <div class="mb-3 slide-in">
+            <label for="genre" class="form-label">Genre</label>
+            <select class="form-select" id="genre" name="genre">
+                <option value="">-- Choisir --</option>
+                <option value="M">Masculin</option>
+                <option value="F">Féminin</option>
+            </select>
+        </div>
+
+        <div class="mb-3 slide-in">
+            <label for="photo" class="form-label">Photo de profil</label>
+            <input type="file" name="photo" id="photo" class="form-control" accept="image/*" onchange="previewImage(event)">
+            <img id="preview" alt="Aperçu photo">
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-3 slide-in">Ajouter</button>
+
+        <div class="text-center mt-3 slide-in">
+            <a href="{% url 'liste_contacts' %}" class="btn btn-sm btn-secondary">← Retour à la liste des contacts</a>
+        </div>
+    </form>
+</div>
+
+<!-- JS PREVIEW IMAGE -->
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById('preview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // Effet progressif pour chaque élément du formulaire
+    document.addEventListener("DOMContentLoaded", () => {
+        const fields = document.querySelectorAll(".slide-in");
+        fields.forEach((el, i) => {
+            el.style.animationDelay = `${i * 0.1}s`;
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'contacts/base.html' %}
+{% block title %}Modifier {{ agent.prenom }} {{ agent.nom }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Modifier l'agent : {{ agent.prenom }} {{ agent.nom }}</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+    <a href="{% url 'profil_agent' agent.id %}" class="btn btn-secondary">Annuler</a>
+  </form>
+</div>
+{% endblock %}

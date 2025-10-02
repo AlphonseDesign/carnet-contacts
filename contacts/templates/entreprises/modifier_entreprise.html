@@ -1,0 +1,14 @@
+{% extends 'contacts/base.html' %}
+{% block title %}Modifier l'entreprise{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Modifier votre entreprise</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+    <a href="{% url 'profil_entreprise' entreprise.id %}" class="btn btn-secondary">Annuler</a>
+  </form>
+</div>
+{% endblock %}

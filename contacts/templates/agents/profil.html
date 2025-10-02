@@ -1,0 +1,99 @@
+{% extends 'contacts/base.html' %}
+{% block title %}Profil de {{ agent.prenom }} {{ agent.nom }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5 animate__animated animate__fadeIn">
+
+  <!-- Bouton de retour -->
+  <div class="mb-3">
+    <a href="{% url 'liste_agents' agent.entreprise.id %}" class="btn btn-outline-secondary shadow-sm">
+      <i class="bi bi-arrow-left"></i> Retour à la liste des agents
+    </a>
+  </div>
+
+  <div class="card shadow overflow-hidden">
+
+    <!-- Image de couverture -->
+    <div class="position-relative" style="height: 250px; background-color: #0d6efd;">
+      {% if agent.entreprise.logo %}
+        <img src="{{ agent.entreprise.logo.url }}" alt="Couverture {{ agent.entreprise.nom }}"
+             class="w-100 h-100" style="object-fit: cover;">
+      {% else %}
+        <div class="h-100 w-100 d-flex align-items-center justify-content-center text-white fs-3">
+          {{ agent.entreprise.nom }}
+        </div>
+      {% endif %}
+
+      <!-- Photo de l'agent en cercle -->
+      <div class="position-absolute start-50 translate-middle border border-4 border-white rounded-circle bg-white"
+           style="bottom: -75px; width: 150px; height: 150px; overflow: hidden;">
+        {% if agent.photo %}
+          <img src="{{ agent.photo.url }}" alt="Photo de {{ agent.nom }}"
+               class="w-100 h-100" style="object-fit: cover;">
+        {% else %}
+          <div class="bg-secondary text-white d-flex align-items-center justify-content-center"
+               style="width: 100%; height: 100%;">
+            <i class="bi bi-person-fill fs-1"></i>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Infos générales -->
+    <div class="card-body text-center mt-5 pt-5">
+      <h2>{{ agent.prenom }} {{ agent.nom }}
+    <i class="bi bi-patch-check-fill text-primary ms-1" title="Compte vérifié" style="font-size: 1.2rem;"></i>
+        </h2>
+
+      <p class="text-muted">Matricule : <strong>{{ agent.matricule }}</strong></p>
+      {% if agent.poste %}
+        <span class="badge bg-info text-dark mb-3">{{ agent.poste }}</span>
+      {% endif %}
+    </div>
+
+    <hr class="mx-4">
+
+    <!-- Informations de contact -->
+    <div class="card-body px-5 pb-4">
+      <h5 class="text-primary mb-3">
+        <i class="bi bi-person-lines-fill me-2"></i>Informations de contact
+      </h5>
+      <ul class="list-group list-group-flush mb-4">
+        <li class="list-group-item">
+          <i class="bi bi-envelope-fill me-2 text-primary"></i>
+          <strong>Email :</strong> {{ agent.email|default:"Non renseigné" }}
+        </li>
+        <li class="list-group-item">
+          <i class="bi bi-telephone-fill me-2 text-primary"></i>
+          <strong>Téléphone :</strong> {{ agent.telephone|default:"Non renseigné" }}
+        </li>
+        <li class="list-group-item">
+          <i class="bi bi-geo-alt-fill me-2 text-primary"></i>
+          <strong>Adresse :</strong> {{ agent.adresse|default:"Non renseignée" }}
+        </li>
+      </ul>
+
+      <!-- CV -->
+      <h5 class="text-primary mb-3">
+        <i class="bi bi-file-earmark-person-fill me-2"></i>Curriculum Vitae
+      </h5>
+      {% if agent.cv %}
+        <a href="{{ agent.cv.url }}" class="btn btn-outline-secondary shadow-sm" target="_blank">
+          <i class="bi bi-download me-1"></i> Télécharger le CV
+        </a>
+      {% else %}
+        <p class="text-muted">Aucun CV fourni.</p>
+      {% endif %}
+    </div>
+
+    {% if request.user == agent.entreprise.proprietaire %}
+      <div class="text-center mb-4">
+        <a href="{% url 'modifier_agent' agent.id %}" class="btn btn-outline-warning shadow-sm">
+          <i class="bi bi-pencil-square"></i> Modifier l'agent
+        </a>
+      </div>
+    {% endif %}
+    
+  </div>
+</div>
+{% endblock %}

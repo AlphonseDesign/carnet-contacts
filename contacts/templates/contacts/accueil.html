@@ -1,0 +1,127 @@
+{% extends 'contacts/base.html' %}
+{% load static %}
+
+{% block title %}Accueil - Carnet d'Adresses{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(to right, #e0f7fa, #ffffff);
+    }
+
+    .fade-in {
+        opacity: 0;
+        transform: scale(0.95);
+        animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .delay-1 { animation-delay: 0.3s; }
+    .delay-2 { animation-delay: 0.6s; }
+    .delay-3 { animation-delay: 0.9s; }
+
+    .logo-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-50px); }
+        100% { transform: translateY(0); }
+    }
+
+    .logo-image {
+        width: 350px;
+        transition: transform 0.3s ease;
+    }
+
+    .logo-image:hover {
+        transform: rotate(4deg) scale(1.05);
+    }
+
+    .title-container {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .description-container {
+        max-width: 700px;
+        margin: 0 auto;
+        text-align: center;
+        font-size: 1.2rem;
+        color: #444;
+    }
+
+    .btn-commencer-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .btn-start {
+        padding: 12px 28px;
+        font-size: 1.2rem;
+        border-radius: 30px;
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        color: white;
+        transition: all 0.3s ease;
+        border: none;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        text-decoration: none;
+    }
+
+    .btn-start:hover {
+        background: linear-gradient(135deg, #0056b3, #0099cc);
+        transform: translateY(-2px);
+    }
+</style>
+
+<script>
+    // Animation de la page au chargement
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.opacity = 1;
+        });
+    });
+</script>
+
+<div class="mt-5 px-4 text-center">
+    <!-- Logo animé -->
+    <div class="fade-in delay-90 logo-container">
+        <img src="{% static 'contacts/images/logo_carnet.png' %}" alt="Logo Carnet" class="logo-image">
+    </div>
+
+    <!-- Titre principal -->
+    <div class="fade-in delay-1 title-container">
+        <h1 class="fw-bold text-primary display-4">
+            Carnet d'Adresses Numérique
+        </h1>
+    </div>
+
+    <!-- Description -->
+    <div class="fade-in delay-2 description-container">
+        <p>
+            Gérez facilement tous vos contacts personnels et professionnels<br>
+            avec une interface fluide, rapide et intuitive, créer votre entreprise et gérez vos agents.
+        </p>
+    </div>
+
+    <!-- Bouton "Commencer" -->
+    <div class="fade-in delay-3 btn-commencer-container">
+        {% if user.is_authenticated %}
+            <a href="{% url 'liste_contacts' %}" class="btn btn-start">Commencer</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-start">Commencer</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
