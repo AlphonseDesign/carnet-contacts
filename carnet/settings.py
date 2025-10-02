@@ -14,8 +14,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-umi10be49hr*wqhvaasn@
 # Le mode DEBUG est désactivé en production (Render le gérera avec une variable d'environnement).
 # On force le mode 'True' uniquement si la variable d'environnement est 'True'.
 DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
-# La liste des hôtes autorisés est construite dynamiquement.
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+# Si DEBUG est False (en production), on ajoute l'hôte de Render en dur.
+if not DEBUG:
+    # Assurez-vous que cette URL est EXACTEMENT celle que vous voyez dans l'erreur.
+    ALLOWED_HOSTS.append('carnet-contacts.onrender.com')
 
 # Récupérer l'URL de Render
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
